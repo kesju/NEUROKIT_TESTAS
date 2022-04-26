@@ -1,0 +1,131 @@
+Skriptas rpeaks sulyginimui. Lyginamas rpeaks masyvas, suformuotas iš json failo,
+nuskaityto iš Zive frontendo ir rpeaks masyvas, gautas iš EKG signalo naudojant
+Neurokit2 funkciją ecg_peaks. EKG signalas (įrašas) irgi gautas iš Zive frontendo.
+Abu rpeaks masyvai įrašomi į json vizualiniam sulyginimui su http://www.jsondiff.com/
+rpeaks iš json failo varde pridėta '-js', rpeaks iš signalo - pridėta '-sg'
+
+Zive įrašas:  1625402.027
+rpeaks iš json failo: 765
+rpeaks iš signal: 765
+
+Reikšmės faile rpeaks_from_json kurių nėra faile rpeaks_from_signal
+i     index   rpeak
+0        11    2042
+1        72   12819
+Reikšmės faile rpeaks_from_signal kurių nėra faile rpeaks_from_json
+i     index   rpeak
+0        11    2041
+1       665  110407
+
+Zive įrašas:  1625400.796
+rpeaks iš json failo: 818
+rpeaks iš signal: 818
+
+Reikšmės faile rpeaks_from_json kurių nėra faile rpeaks_from_signal
+i     index   rpeak
+0        54    8703
+Reikšmės faile rpeaks_from_signal kurių nėra faile rpeaks_from_json
+i     index   rpeak
+0        54    8699
+
+Zive įrašas:  1630757.924
+rpeaks iš json failo: 742
+rpeaks iš signal: 735
+
+Reikšmės faile rpeaks_from_json kurių nėra faile rpeaks_from_signal
+i     index   rpeak
+0        61   10997
+1       231   40592
+2       303   53558
+3       353   62393
+4       609  103728
+5       650  111407
+6       730  125953
+Reikšmės faile rpeaks_from_signal kurių nėra faile rpeaks_from_json
+Tokių reikšmių nėra
+
+Zive įrašas:  1644283.039
+rpeaks iš json failo: 626
+rpeaks iš signal: 632
+
+Reikšmės faile rpeaks_from_json kurių nėra faile rpeaks_from_signal
+i     index   rpeak
+0       533  109942
+Reikšmės faile rpeaks_from_signal kurių nėra faile rpeaks_from_json
+i     index   rpeak
+0        56   11744
+1       103   21101
+2       108   21897
+3       111   22292
+4       537  109891
+5       538  110023
+6       546  111401
+
+Zive įrašas:  1644398.788
+rpeaks iš json failo: 871
+rpeaks iš signal: 871
+
+Reikšmės faile rpeaks_from_json kurių nėra faile rpeaks_from_signal
+Tokių reikšmių nėra
+Reikšmės faile rpeaks_from_signal kurių nėra faile rpeaks_from_json
+Tokių reikšmių nėra
+
+Zive įrašas:  1645154.772
+rpeaks iš json failo: 513
+rpeaks iš signal: 521
+
+Reikšmės faile rpeaks_from_json kurių nėra faile rpeaks_from_signal
+Tokių reikšmių nėra
+Reikšmės faile rpeaks_from_signal kurių nėra faile rpeaks_from_json
+i     index   rpeak
+0         4     924
+1        93   23556
+2       188   46382
+3       211   51797
+4       264   64840
+5       282   69119
+6       350   85919
+7       469  115624
+
+Zive įrašas:  1644283.039
+rpeaks iš json failo: 626
+rpeaks iš signal: 632
+
+Reikšmės faile rpeaks_from_json kurių nėra faile rpeaks_from_signal
+i     index   rpeak
+0       533  109942
+Reikšmės faile rpeaks_from_signal kurių nėra faile rpeaks_from_json
+i     index   rpeak
+0        56   11744
+1       103   21101
+2       108   21897
+3       111   22292
+4       537  109891
+5       538  110023
+6       546  111401
+
+Zive įrašas:  1644398.788
+rpeaks iš json failo: 871
+rpeaks iš signal: 871
+
+Reikšmės faile rpeaks_from_json kurių nėra faile rpeaks_from_signal
+Tokių reikšmių nėra
+Reikšmės faile rpeaks_from_signal kurių nėra faile rpeaks_from_json
+Tokių reikšmių nėra
+
+Zive įrašas:  1645154.772
+rpeaks iš json failo: 513
+rpeaks iš signal: 521
+
+Reikšmės faile rpeaks_from_json kurių nėra faile rpeaks_from_signal
+Tokių reikšmių nėra
+Reikšmės faile rpeaks_from_signal kurių nėra faile rpeaks_from_json
+i     index   rpeak
+0         4     924
+1        93   23556
+2       188   46382
+3       211   51797
+4       264   64840
+5       282   69119
+6       350   85919
+7       469  115624
