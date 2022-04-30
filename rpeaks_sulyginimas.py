@@ -20,7 +20,7 @@ def AnalyseHeartrate(ecg_signal_df):
     ret = {'rpeaks':rpeaks['ECG_R_Peaks'].tolist()}
     return ret 
 
-sys.stdout.reconfigure(encoding='utf-8')
+# sys.stdout.reconfigure(encoding='utf-8')
 
 pd.set_option("display.max_rows", 6000, "display.max_columns",200)
 pd.set_option('display.width', 1000)
@@ -40,7 +40,8 @@ file_names = ['1625402.027', '1625400.796', '1630757.924','1644283.039', '164439
 for file_name in file_names:    
     print(f"\nZive įrašas:  {file_name:>2}")
 
-    # I-a dalis: nuskaitome rpeaks iš json failo
+        # I-a dalis: nuskaitome rpeaks iš json failo
+
     filename = file_name + '.json'
     with open(filename,'r', encoding='UTF-8', errors = 'ignore') as f:
         data = json.loads(f.read())
@@ -54,15 +55,16 @@ for file_name in file_names:
 
     # Suformuojame supaprastintą json failą sulyginimui, prie vardo pridėta 'js'
     # Sulyginimui naudoju http://www.jsondiff.com/
-    data = [{"sampleIndex":int(c), "annotationValue":"N"} for c in rpeaks_from_json]
-    filename = file_name + '-js' + '.json'
-    with open(filename, 'w', encoding='UTF-8') as outfile:
-        json.dump(data, outfile)
+    # data = [{"sampleIndex":int(c), "annotationValue":"N"} for c in rpeaks_from_json]
+    # filename = file_name + '-js' + '.json'
+    # with open(filename, 'w', encoding='UTF-8') as outfile:
+    #     json.dump(data, outfile)
     # print(data)    
 
 
-    # II-a dalis: suformuojame rpeaks su Neurokitu,
-    # pakartojant Zive skriptą iš analysis.py ir heartrate_analysis.py
+        # II-a dalis: suformuojame rpeaks su Neurokitu,
+        # pakartojant Zive skriptą iš analysis.py ir heartrate_analysis.py
+    
     ecg_signal_df = pd.DataFrame(zive_read_file_1ch(file_name), columns=['orig'])
     analysis_results = AnalyseHeartrate(ecg_signal_df)
     rpeaks_from_signal = analysis_results['rpeaks']
@@ -71,11 +73,13 @@ for file_name in file_names:
     # print(rpeaks_from_signal)
     
   # Suformuojame supaprastintą json failą sulyginimui, prie vardo pridėta 'sg'
-    data = [{"sampleIndex":int(c), "annotationValue":"N"} for c in rpeaks_from_signal]
-    filename = file_name + '-sg' + '.json'
-    with open(filename, 'w', encoding='UTF-8') as outfile:
-        json.dump(data, outfile)
+    # data = [{"sampleIndex":int(c), "annotationValue":"N"} for c in rpeaks_from_signal]
+    # filename = file_name + '-sg' + '.json'
+    # with open(filename, 'w', encoding='UTF-8') as outfile:
+    #     json.dump(data, outfile)
     # print(data)    
+
+            # Sulyginimas
 
     print("\nReikšmės faile rpeaks_from_json kurių nėra faile rpeaks_from_signal")
     ab = np.setdiff1d(rpeaks_from_json, rpeaks_from_signal)
