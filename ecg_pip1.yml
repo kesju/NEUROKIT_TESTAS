@@ -2,13 +2,13 @@ name: ecg
 # channels:
   # - defaults
 dependencies:
- - python=3.6
+ - python=3.7
  - pip
+ - ipython
  - pip:
     - neurokit2==0.1.5
-    # - pandas==1.3.5
-    - pandas
-    - numpy
+    - pandas==1.3.5
+    - numpy==1.21.4
     # - sklearn 
-    - wget
+    # - wget
 

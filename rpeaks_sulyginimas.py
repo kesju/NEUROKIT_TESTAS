@@ -16,7 +16,7 @@ def zive_read_file_1ch(filename):
     return ecg_signal
 
 def AnalyseHeartrate(ecg_signal_df):
-    _, rpeaks = nk.ecg_peaks(ecg_signal_df['orig'], sampling_rate=200, correct_artifacts=False)
+    _, rpeaks = nk.ecg_peaks(ecg_signal_df['orig'], method="neurokit", sampling_rate=200, correct_artifacts=False)
     ret = {'rpeaks':rpeaks['ECG_R_Peaks'].tolist()}
     return ret 
 
@@ -72,7 +72,7 @@ for file_name in file_names:
 
     # print(rpeaks_from_signal)
     
-  # Suformuojame supaprastintą json failą sulyginimui, prie vardo pridėta 'sg'
+  # Suformuojame spython3 upaprastintą json failą sulyginimui, prie vardo pridėta 'sg'
     # data = [{"sampleIndex":int(c), "annotationValue":"N"} for c in rpeaks_from_signal]
     # filename = file_name + '-sg' + '.json'
     # with open(filename, 'w', encoding='UTF-8') as outfile:
