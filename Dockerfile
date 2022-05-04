@@ -1,33 +1,18 @@
 # https://pythonspeed.com/articles/activate-conda-dockerfile/
 
-FROM continuumio/miniconda3
+# FROM python:3-buster
+
+FROM python@sha256:4fd903851bddfd9738eef5421a7775f11ee6d49f05f6f6c77be4634560f97e04
+# RUN pip install flask waitress neurokit2 bitstring pika requests simplejson pyyaml wfdb tensorflow
+
 
 RUN mkdir /source
 WORKDIR /source
 
-# Create the environment:
-COPY ecg_lnx_38.yml ./
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt 
 
-RUN conda env create -f ecg_lnx_38.yml
-RUN echo "created conda environment ecg_lnx"
+COPY rpeaks_sulyginimas.py ./
 
-ADD heartrate_analysis.py mq_listener.py analyse.py zive_cnn_fda_vu_v1.py quality_analysis.py atrial_fibrillation.py ./
-ADD model_cnn_fda_vu_v1 model_cnn_fda_vu_v1
-
-# Make RUN commands use the new environment:
-# SHELL ["conda", "run", "-n", "ecg_lnx", "/bin/bash", "-c"]
-
-
-# The code to run when container is started:
-ENTRYPOINT ["conda", "run", "-n", "ecg_lnx", "/bin/bash", "-c"]
-
-# Sitas eilutes naudoju tik Zive aplinkoje
-ADD index.js ./
-# node_modules are preinstalled in a previous CI step (node_modules step)
-# lokalioje aplinkoje reikia susikurti tuscia folderi node_modules
-ADD node_modules node_modules
-CMD ["node ./index.js"]
-RUN apt-get update && apt-get install jq -y
-
-ADD test.sh ./
-ADD test ./test
+# CMD [ "python", "rpeaks_sulyginimas.py" ] 
+CMD ["/bin/bash", "python", "rpeaks_sulyginimas.py"] 

@@ -1,28 +1,32 @@
 # %%
-# Skriptas rpeaks sekų, gautų iš .json failo ir EKG įrašo, panaudojant NEUROKIT2, sulyginimui 
+# Skriptas rpeaks sekų, gautų iš .json failo ir EKG įrašo, panaudojant NEUROKIT2, sulyginimui
 
 import pandas as pd
 import numpy as np
-import json, sys
+import json
+import yaml
 import neurokit2 as nk
+from pathlib import Path
+
 
 def zive_read_file_1ch(filename):
     f = open(filename, "r")
     a = np.fromfile(f, dtype=np.dtype('>i4'))
-    ADCmax=0x800000
-    Vref=2.5
+    ADCmax = 0x800000
+    Vref = 2.5
     b = (a - ADCmax/2)*2*Vref/ADCmax/3.5*1000
     ecg_signal = b - np.mean(b)
     return ecg_signal
 
+
 def AnalyseHeartrate(ecg_signal_df):
-    _, rpeaks = nk.ecg_peaks(ecg_signal_df['orig'], sampling_rate=200, correct_artifacts=False)
-    ret = {'rpeaks':rpeaks['ECG_R_Peaks'].tolist()}
-    return ret 
+    _, rpeaks = nk.ecg_peaks(
+        ecg_signal_df['orig'], sampling_rate=200, method="neurokit", correct_artifacts=False)
+    ret = {'rpeaks': rpeaks['ECG_R_Peaks'].tolist()}
+    return ret
 
-# sys.stdout.reconfigure(encoding='utf-8')
 
-pd.set_option("display.max_rows", 6000, "display.max_columns",200)
+pd.set_option("display.max_rows", 6000, "display.max_columns", 200)
 pd.set_option('display.width', 1000)
 
 print("Skriptas rpeaks sulyginimui. Lyginamas rpeaks masyvas, suformuotas iš json failo,")
@@ -31,19 +35,23 @@ print("Neurokit2 funkciją ecg_peaks. EKG signalas (įrašas) irgi gautas iš Zi
 print("Abu rpeaks masyvai įrašomi į json vizualiniam sulyginimui su http://www.jsondiff.com/")
 print("rpeaks iš json failo varde pridėta '-js', rpeaks iš signalo - pridėta '-sg'")
 
+rec_dir = Path("data")
 
-file_names = ['1625402.027', '1625400.796', '1630757.924','1644283.039', '1644398.788',
-'1645154.772','1644283.039', '1644398.788', '1645154.772']
-# file_names = ['1625402.027']
-# file_name = ['mano_1638705.736']
+filepath = Path(rec_dir, "name_list.yaml")
+with open(filepath, "r") as f:
+    dictionary = yaml.load(f, Loader=yaml.FullLoader)
+list = dictionary['file_names']
+for file_name in list:
+    print(str(file_name))
 
-for file_name in file_names:    
+for file_name in list:
+    file_name = str(file_name)
     print(f"\nZive įrašas:  {file_name:>2}")
 
-        # I-a dalis: nuskaitome rpeaks iš json failo
+    # I-a dalis: nuskaitome rpeaks iš json failo
 
-    filename = file_name + '.json'
-    with open(filename,'r', encoding='UTF-8', errors = 'ignore') as f:
+    filepath = Path(rec_dir, file_name + '.json')
+    with open(filepath, 'r', encoding='UTF-8', errors='ignore') as f:
         data = json.loads(f.read())
     rpeaks_dict = data['rpeaks']
     rpeaks_from_json = np.array([dict['sampleIndex'] for dict in rpeaks_dict])
@@ -51,7 +59,7 @@ for file_name in file_names:
     # print(rpeaks_from_json)
 
     print(f"rpeaks iš json failo: {len(rpeaks_from_json)}")
-    # print(rpeaks_json) 
+    # print(rpeaks_json)
 
     # Suformuojame supaprastintą json failą sulyginimui, prie vardo pridėta 'js'
     # Sulyginimui naudoju http://www.jsondiff.com/
@@ -59,27 +67,30 @@ for file_name in file_names:
     # filename = file_name + '-js' + '.json'
     # with open(filename, 'w', encoding='UTF-8') as outfile:
     #     json.dump(data, outfile)
-    # print(data)    
+    # print(data)
 
+    # II-a dalis: suformuojame rpeaks su Neurokitu,
+    # pakartojant Zive skriptą iš analysis.py ir heartrate_analysis.py
+    filepath = Path(rec_dir, file_name)
+    signal_raw = zive_read_file_1ch(filepath)
+    # signal = nk.signal_filter(signal=signal_raw, sampling_rate=200, lowcut=0.5, method="butterworth", order=5)
+    signal = signal_raw
+    ecg_signal_df = pd.DataFrame(signal, columns=['orig'])
 
-        # II-a dalis: suformuojame rpeaks su Neurokitu,
-        # pakartojant Zive skriptą iš analysis.py ir heartrate_analysis.py
-    
-    ecg_signal_df = pd.DataFrame(zive_read_file_1ch(file_name), columns=['orig'])
     analysis_results = AnalyseHeartrate(ecg_signal_df)
     rpeaks_from_signal = analysis_results['rpeaks']
     print(f"rpeaks iš signal: {len(rpeaks_from_signal)}")
 
     # print(rpeaks_from_signal)
-    
+
   # Suformuojame supaprastintą json failą sulyginimui, prie vardo pridėta 'sg'
     # data = [{"sampleIndex":int(c), "annotationValue":"N"} for c in rpeaks_from_signal]
     # filename = file_name + '-sg' + '.json'
     # with open(filename, 'w', encoding='UTF-8') as outfile:
     #     json.dump(data, outfile)
-    # print(data)    
+    # print(data)
 
-            # Sulyginimas
+    # Sulyginimas
 
     print("\nReikšmės faile rpeaks_from_json kurių nėra faile rpeaks_from_signal")
     ab = np.setdiff1d(rpeaks_from_json, rpeaks_from_signal)
@@ -98,7 +109,7 @@ for file_name in file_names:
         print('Tokių reikšmių nėra')
 
     print("Reikšmės faile rpeaks_from_signal kurių nėra faile rpeaks_from_json")
-    ba = np.setdiff1d(rpeaks_from_signal,rpeaks_from_json)
+    ba = np.setdiff1d(rpeaks_from_signal, rpeaks_from_json)
     # print(ba)   # Return the unique values in b that are not in a
 
     flag = np.size(ba)
@@ -111,9 +122,3 @@ for file_name in file_names:
         # print(idxs)
     else:
         print('Tokių reikšmių nėra')
-
-
-
-
-
-
