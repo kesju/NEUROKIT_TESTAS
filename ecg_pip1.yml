@@ -3,10 +3,9 @@ name: ecg
   # - defaults
 dependencies:
  - python=3.9
- - ipython
  - pip
- - ipython
  - pip:
+    - ipython
     - neurokit2==0.1.5
     # - pandas==1.3.5
     - pandas
